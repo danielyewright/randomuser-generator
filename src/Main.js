@@ -12,7 +12,10 @@ class Main extends React.Component {
       users: null,
       value: '',
       showButtons: false,
+      showAlert: false,
       isLoading: false,
+      success: false,
+      error: false,
       message: ''
     }
 
@@ -52,17 +55,29 @@ class Main extends React.Component {
     try {
       if (this.state.numResults !== '') {
         if (this.state.numResults > 5000) {
-          alert('You cannot generate more than 5,000 results. Please enter a smaller value.');
           this.setState({
-            numResults: ''
+            error: true,
+            message: 'You cannot generate more than 5,000 results. Please enter a smaller value.',
+            isLoading: false,
+            showAlert: true
+          }, () => {
+            window.setTimeout(() => {
+              this.setState({showAlert: false});
+            }, 3000)
           });
           this.focus();
           return false;
         }
         else if (this.state.numResults < 0) {
-          alert('You cannot generate a negative amount. Please enter a positive value.');
           this.setState({
-            numResults: ''
+            error: true,
+            message: 'You cannot generate a negative amount. Please enter a positive value.',
+            isLoading: false,
+            showAlert: true
+          }, () => {
+            window.setTimeout(() => {
+              this.setState({showAlert: false});
+            }, 3000)
           });
           this.focus();
           return false;
@@ -80,7 +95,16 @@ class Main extends React.Component {
         }
       }
       else {
-        alert('You must specify a valid number to generate');
+        this.setState({
+          error: true,
+          message: 'You must specify a valid number to generate',
+          isLoading: false,
+          showAlert: true
+        }, () => {
+          window.setTimeout(() => {
+            this.setState({showAlert: false});
+          }, 3000)
+        });
         this.focus();
         return false;
       }
@@ -109,7 +133,16 @@ class Main extends React.Component {
         });
       }
       else {
-        alert('You must generate user data first');
+        this.setState({
+          error: true,
+          message: 'You must generate user data first.',
+          isLoading: false,
+          showAlert: true
+        }, () => {
+          window.setTimeout(() => {
+            this.setState({showAlert: false});
+          }, 3000)
+        });
         this.focus();
         return false;
       }
@@ -125,7 +158,16 @@ class Main extends React.Component {
         download(this.state.dataResults, 'UserData-' + Date.now() + '.json', 'text/json;charset=utf-8');
       }
       else {
-        alert('You must generate user data first');
+        this.setState({
+          error: true,
+          message: 'You must generate user data first.',
+          isLoading: false,
+          showAlert: true
+        }, () => {
+          window.setTimeout(() => {
+            this.setState({showAlert: false});
+          }, 3000)
+        });
         this.focus();
         return false;
       }
@@ -142,8 +184,6 @@ class Main extends React.Component {
       );
     } else {
       if (this.state.showButtons) {
-        alert('Generated data successfully. You may now download the output');
-
         return (
           <React.Fragment>
             <div className="form-inline justify-content-center my-5">
@@ -158,28 +198,37 @@ class Main extends React.Component {
     }
   }
 
+  renderAlerts() {
+    if (this.state.showAlert) {
+      if (this.state.success) {
+        return (
+          <div className="alert alert-success" role="alert">
+            {this.state.message}
+          </div>
+        );
+      } else if (this.state.error) {
+        return (
+          <div className="alert alert-danger" role="alert">
+            {this.state.message}
+          </div>
+        );
+      } else {
+        return null;
+      }
+    } else {
+      return false;
+    }
+  }
+
   render() {
     return (
       <React.Fragment>
-        {
-          this.state.success ? (
-            <div class="alert alert-success" role="alert">
-              {this.state.message}
-            </div>
-          ) : null
-        }
-        {
-          this.state.error ? (
-            <div class="alert alert-danger" role="alert">
-              {this.state.message}
-            </div>
-          ) : null
-        }
+        {this.renderAlerts()}
         <div className="form-group form-inline">
           <label htmlFor="numResults">Data size</label>
           <input type="number" className="form-control" name="numResults" value={this.state.numResults} disabled={this.state.dataResults} min="1" max="5000" ref={(input) => { this.textInput = input; }} onChange={this.handleChange} pattern="[0-9]" inputMode="numeric" />
-          <button type="button" className="btn btn-primary" id="xgenerate" onClick={this.handleGenerate} disabled={this.state.dataResults}>Generate</button>
-          <button type="button" className="btn btn-secondary" id="clear" onClick={this.handleClear} disabled={!this.state.dataResults}>Clear</button>
+          <button type="button" className="btn btn-primary" onClick={this.handleGenerate} disabled={this.state.dataResults}>Generate</button>
+          <button type="button" className="btn btn-secondary" onClick={this.handleClear} disabled={!this.state.dataResults}>Clear/Reload</button>
         </div>
         {this.renderIsLoading()}
       </React.Fragment>
