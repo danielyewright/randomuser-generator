@@ -1,24 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Main from './Main';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className="col-6">
+          <h1 className="mb-5 mt-3">Random User Data Generator</h1>
+          <p>This tool generates random user data from <a href="https://randomuser.me">randomuser.me</a> that can be downloaded as a CSV or JSON file.</p>
+          <p>Once data is generated, you must click <b>Clear</b> or refresh the page to re-generate data.</p>
+          <br />
+          <Main />
+        </div>
+      </div>
     </div>
   );
 }
