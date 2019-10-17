@@ -7,8 +7,8 @@ function App() {
     <div className="container">
       <div className="row justify-content-center">
         <div className="col-6">
-          <h1 className="mb-5 mt-3">Random User Data Generator</h1>
-          <p>This tool generates random user data from <a href="https://randomuser.me">randomuser.me</a> that can be downloaded as a CSV or JSON file.</p>
+          <h1 className="mb-5 mt-3">Random User Generator</h1>
+          <p>This tool gets random user data from the <a href="https://randomuser.me" target="_blank" rel="noopener noreferrer">randomuser.me</a> API, which can then be downloaded as a CSV or JSON file.</p>
           <p>Once data is generated, you must click <b>Clear</b> or refresh the page to re-generate data.</p>
           <br />
           <Main />

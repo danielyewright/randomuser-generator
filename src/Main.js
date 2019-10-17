@@ -12,7 +12,8 @@ class Main extends React.Component {
       users: null,
       value: '',
       showButtons: false,
-      isLoading: false
+      isLoading: false,
+      message: ''
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -76,8 +77,6 @@ class Main extends React.Component {
                 isLoading: false
               });
             })
-
-          alert('Generated ' + this.state.numResults + ' result(s) successfully. You may now download the output');
         }
       }
       else {
@@ -143,6 +142,8 @@ class Main extends React.Component {
       );
     } else {
       if (this.state.showButtons) {
+        alert('Generated data successfully. You may now download the output');
+
         return (
           <React.Fragment>
             <div className="form-inline justify-content-center my-5">
@@ -160,6 +161,20 @@ class Main extends React.Component {
   render() {
     return (
       <React.Fragment>
+        {
+          this.state.success ? (
+            <div class="alert alert-success" role="alert">
+              {this.state.message}
+            </div>
+          ) : null
+        }
+        {
+          this.state.error ? (
+            <div class="alert alert-danger" role="alert">
+              {this.state.message}
+            </div>
+          ) : null
+        }
         <div className="form-group form-inline">
           <label htmlFor="numResults">Data size</label>
           <input type="number" className="form-control" name="numResults" value={this.state.numResults} disabled={this.state.dataResults} min="1" max="5000" ref={(input) => { this.textInput = input; }} onChange={this.handleChange} pattern="[0-9]" inputMode="numeric" />
